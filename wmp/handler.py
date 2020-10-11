@@ -6,12 +6,17 @@ class Handler:
         self.callback = callback
 
     def parse(self, message):
-        [name, arguments] = message.split(":")
+        name = ""
+        arguments = ""
+        parts = message.split(":")
+        if len(parts) >= 2:
+            [name, arguments] = parts
 
         if name == "ID":
             [model, mac, ip, protocol, version, rssi,
-                _z, _y, _x] = arguments.split(",")
-            self.callback.id(model, mac, ip, protocol, version, rssi)
+                device_id, _y, _x] = arguments.split(",")
+            self.callback.id(model, mac, ip, protocol,
+                             version, rssi, device_id)
 
         if name == "INFO":
             self.callback.info(arguments.split(","))

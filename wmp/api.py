@@ -15,22 +15,22 @@ class API:
         self._transport.send("SET,%i:%s,%s" % (ac_num, function, value))
 
     def get(self, ac_num, function):
-        self._transport.send("GET,%i:%s" % ac_num, function)
+        self._transport.send("GET,%i:%s" % (ac_num, function))
 
     def login(self, password):
-        self._transport.send("LOGIN:%s" % password)
+        self._transport.send("LOGIN:%s" % (password))
 
     def logout(self):
         self._transport.send("LOGOUT")
 
     def send_config(self, item, value):
-        self._transport.send("CFG:%s,%s" % item, value)
+        self._transport.send("CFG:%s,%s" % (item, value))
 
     def get_config(self, item):
-        self._transport.send("CFG:%" % item)
+        self._transport.send("CFG:%s" % (item))
 
     def set_limits(self, function, range):
-        self._transport.send("LIMITS:%s,%s" % function, range)
+        self._transport.send("LIMITS:%s,%s" % (function, range))
 
     def get_limits(self, function):
-        self._transport.send("LIMITS:%s" % function)
+        self._transport.send("LIMITS:%s" % (function))
