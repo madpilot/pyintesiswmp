@@ -14,46 +14,42 @@ class IdResult:
         self._x = _x
 
 
-class Handler:
-    def __init__(self, callback):
-        self.callback = callback
+class CnfResult:
+    def __init__(self, function, value):
+        self.function = function
+        self.value = value
 
-    def parse(self, message):
-        name = ""
-        arguments = ""
-        parts = message.split(":")
-        if len(parts) >= 2:
-            [name, arguments] = parts
 
-        if name == "ID":
-            [model, mac, ip, protocol, version, rssi,
-                device_id, _y, _x] = arguments.split(",")
-            return IdResult(model, mac, ip, protocol, version, rssi,  device_id, _y, _x)
+def parse(message):
+    name = ""
+    arguments = ""
+    parts = message.split(":")
+    if len(parts) >= 2:
+        [name, arguments] = parts
 
-        if name == "INFO":
-            return True
+    if name == "ID":
+        [model, mac, ip, protocol, version, rssi,
+            device_id, _y, _x] = arguments.split(",")
+        return IdResult(model, mac, ip, protocol, version, rssi,  device_id, _y, _x)
 
-        if name == "ACK":
-            return True
+    if name == "INFO":
+        return True
 
-        if name == "OK":
-            return True
+    if name == "ACK":
+        return True
 
-        if name == "CFG":
-            return True
+    if name == "OK":
+        return True
 
-        if name == "LIMITS":
-            return True
+    if name == "CFG":
+        return True
 
-    def parse_change(self, ac_num, function, value):
-        if function == "ONOFF":
-            self.callback.power(ac_num, value)
+    if name == "LIMITS":
+        return True
 
-        if function == "MODE":
-            self.callback.mode(ac_num, value)
+    results = re.match(r'CHN,(\d+):(.+)', message)
+    if results is not None:
+        [function, value] = results.group(2).split(",")
+        return CnfResult(function, value)
 
-        if function == "SETPTEMP":
-            self.callback.set_point(ac_num, float(value) / 10)
-
-        if function == "FANSP":
-            self.callback.fan_speed(ac_num, value)
+    return None

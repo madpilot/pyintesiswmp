@@ -2,47 +2,69 @@ from wmp import API
 
 
 class Control:
-    def __init__(self, api):
-        self.api = api
+    def __init__(self, connector):
+        self.api = API(connector)
 
-    def set_power(self, ac_num, state):
-        self.api.set(ac_num, "ONOFF", state)
+    async def get_id(self):
+        return await self.api.id()
 
-    def get_power(self, ac_num):
-        self.api.get(ac_num, "ONOFF")
+    async def get_state(self, ac_num):
+        return await self.api.get(ac_num, "*")
 
-    def set_mode(self, ac_num, mode):
-        self.api.set(ac_num, "MODE", mode)
+    async def set_power(self, ac_num, state):
+        return await self.api.set(ac_num, "ONOFF", state)
 
-    def get_mode(self, ac_num):
-        self.api.get(ac_num, "MODE")
+    async def get_power(self, ac_num):
+        result = await self.api.get(ac_num, "ONOFF")
+        if result and result.function == "ONOFF":
+            return result.value
+        else:
+            return None
 
-    def set_set_point(self, ac_num, set_point):
-        self.api.set(ac_num, "SETPTEMP", set_point)
+    async def set_mode(self, ac_num, mode):
+        return await self.api.set(ac_num, "MODE", mode)
 
-    def get_set_point(self, ac_num):
-        self.api.get(ac_num, "SETPTEMP")
+    async def get_mode(self, ac_num):
+        result = await self.api.get(ac_num, "MODE")
+        if result and result.function == "MODE":
+            return result.value
+        else:
+            return None
 
-    def set_fan_speed(self, ac_num, fan_speed):
-        self.api.set(ac_num, "FANSP", fan_speed)
+    async def set_set_point(self, ac_num, set_point):
+        return await self.api.set(ac_num, "SETPTEMP", set_point)
 
-    def get_fan_speed(self, ac_num):
-        self.api.get(ac_num, "FANSP")
+    async def get_set_point(self, ac_num):
+        result = await self.api.get(ac_num, "SETPTEMP")
+        if result and result.function == "SETPTEMP":
+            return result.value
+        else:
+            return None
 
-    def turn_on(self, ac_num):
-        self.set_power(ac_num, "ON")
+    async def set_fan_speed(self, ac_num, fan_speed):
+        return await self.api.set(ac_num, "FANSP", fan_speed)
 
-    def turn_off(self, ac_num):
-        self.set_power(ac_num, "OFF")
+    async def get_fan_speed(self, ac_num):
+        result = await self.api.get(ac_num, "FANSP")
+        if result and result.function == "FANSP":
+            return result.value
+        else:
+            return None
 
-    def set_mode_heat(self, ac_num):
-        self.set_mode(ac_num, "heat")
+    async def turn_on(self, ac_num):
+        return await self.set_power(ac_num, "ON")
 
-    def set_mode_cool(self, ac_num):
-        self.set_mode(ac_num, "cool")
+    async def turn_off(self, ac_num):
+        return await self.set_power(ac_num, "OFF")
 
-    def set_mode_fan(self, ac_num):
-        self.set_mode(ac_num, "fan")
+    async def set_mode_heat(self, ac_num):
+        return await self.set_mode(ac_num, "heat")
 
-    def set_mode_dry(self, ac_num):
-        self.set_mode(ac_num, "dry")
+    async def set_mode_cool(self, ac_num):
+        return await self.set_mode(ac_num, "cool")
+
+    async def set_mode_fan(self, ac_num):
+        return await self.set_mode(ac_num, "fan")
+
+    async def set_mode_dry(self, ac_num):
+        return await self.set_mode(ac_num, "dry")
