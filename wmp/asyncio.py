@@ -37,8 +37,8 @@ class Asyncio(asyncio.Protocol):
 
     def send(self, message):
         if self.transport is not None:
-            self.transport.write(bytes(message + "\r\n", "UTF-8"))
             self.next = self.loop.create_future()
+            self.transport.write(bytes(message + "\r\n", "UTF-8"))
             return self.next
         else:
             future = self.loop.create_future()
