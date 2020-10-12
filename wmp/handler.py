@@ -1,6 +1,19 @@
 import re
 
 
+class IdResult:
+    def __init__(self, model, mac, ip, protocol, version, rssi, device_id, _y, _x):
+        self.model = model
+        self.mac = mac
+        self.ip = ip
+        self.protocol = protocol
+        self.version = version
+        self.rssi = rssi
+        self.device_id = device_id
+        self._y = _y
+        self._x = _x
+
+
 class Handler:
     def __init__(self, callback):
         self.callback = callback
@@ -15,29 +28,22 @@ class Handler:
         if name == "ID":
             [model, mac, ip, protocol, version, rssi,
                 device_id, _y, _x] = arguments.split(",")
-            self.callback.id(model, mac, ip, protocol,
-                             version, rssi, device_id)
+            return IdResult(model, mac, ip, protocol, version, rssi,  device_id, _y, _x)
 
         if name == "INFO":
-            self.callback.info(arguments.split(","))
+            return True
 
         if name == "ACK":
-            self.callback.ack()
+            return True
 
         if name == "OK":
-            self.callback.ok()
+            return True
 
         if name == "CFG":
-            self.callback.cfg(arguments.split(","))
+            return True
 
         if name == "LIMITS":
-            self.callback.limits(arguments.split(","))
-
-        results = re.match(r'CHN,(\d+)', name)
-        if results:
-            [function, value] = arguments.split(",")
-            self.callback.change(results.group(1), function, value)
-            self.parse_change(results.group(1), function, value)
+            return True
 
     def parse_change(self, ac_num, function, value):
         if function == "ONOFF":
