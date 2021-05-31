@@ -1,5 +1,4 @@
 import asyncio
-import re
 from wmp.handler import parse
 
 
@@ -9,12 +8,15 @@ class Asyncio(asyncio.Protocol):
         self.loop = loop
         self.callback = callback
         self.next = None
+        self.disconnection_callback = None
 
     def connection_made(self, transport):
         self.transport = transport
 
     def connection_lost(self, exception):
         self.transport = None
+        if self.disconnection_callback is not None:
+            self.disconnection_callback()
 
     def data_received(self, data):
         lines = data.decode("utf-8").strip().split("\r\n")
