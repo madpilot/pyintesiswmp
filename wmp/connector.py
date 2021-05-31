@@ -19,7 +19,7 @@ class Connector:
                 return
             except OSError:
                 self.attempts += 1
-                delay = 2 ** self.attempts / 100
+                delay = 2 ** self.attempts
                 yield from asyncio.sleep(delay)
 
     def _reconnect(self):
