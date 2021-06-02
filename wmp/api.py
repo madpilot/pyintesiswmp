@@ -1,3 +1,6 @@
+from typing import List
+
+
 class API:
     def __init__(self, transport):
         self._transport = transport
@@ -11,26 +14,26 @@ class API:
     def info(self):
         return self._transport.send("INFO")
 
-    def set(self, ac_num, function, value):
+    def set(self, ac_num: int, function: str, value: str):
         return self._transport.send("SET,%i:%s,%s" % (ac_num, function, value))
 
-    def get(self, ac_num, function):
+    def get(self, ac_num: int, function: str):
         return self._transport.send("GET,%i:%s" % (ac_num, function))
 
-    def login(self, password):
+    def login(self, password: str):
         return self._transport.send("LOGIN:%s" % (password))
 
     def logout(self):
         return self._transport.send("LOGOUT")
 
-    def send_config(self, item, value):
+    def send_config(self, item: str, value: str):
         return self._transport.send("CFG:%s,%s" % (item, value))
 
-    def get_config(self, item):
+    def get_config(self, item: str):
         return self._transport.send("CFG:%s" % (item))
 
-    def set_limits(self, function, range):
-        return self._transport.send("LIMITS:%s,%s" % (function, range))
+    def set_limits(self, function: str, range: List[str]):
+        return self._transport.send("LIMITS:%s,%s" % (function, ",".join(range)))
 
-    def get_limits(self, function):
+    def get_limits(self, function: str):
         return self._transport.send("LIMITS:%s" % (function))
