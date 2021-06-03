@@ -9,7 +9,7 @@ def test_id():
     assert result.ip == "192.168.0.1"
     assert result.protocol == "ASCII"
     assert result.version == "v1.3.3"
-    assert result.rssi == "-50"
+    assert result.rssi == -50
     assert result.device_id == "WMP_000000"
 
 

@@ -9,7 +9,7 @@ class IdResult:
         self.ip: str = ip
         self.protocol: str = protocol
         self.version: str = version
-        self.rssi: str = rssi
+        self.rssi: int = int(rssi)
         self.device_id: str = device_id
         self._y: str = _y
         self._x: str = _x
@@ -34,12 +34,12 @@ class CnfResult:
         self.value: str = value
 
 
-class PongResult:
+class PingResult:
     def __init__(self, rssi: int):
         self.rssi = rssi
 
 
-def parse(message: str) -> Union[IdResult, InfoResult, LimitsResult, CnfResult, bool, None]:
+def parse(message: str) -> Union[PingResult, IdResult, InfoResult, LimitsResult, CnfResult, bool, None]:
     name = ""
     arguments = ""
     parts = message.split(":")
@@ -50,7 +50,7 @@ def parse(message: str) -> Union[IdResult, InfoResult, LimitsResult, CnfResult, 
         [name, arguments] = parts
 
     if name == "PONG":
-        return PongResult(int(arguments))
+        return PingResult(int(arguments))
 
     if name == "ID":
         [model, mac, ip, protocol, version, rssi,
