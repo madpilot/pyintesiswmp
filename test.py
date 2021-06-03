@@ -24,7 +24,7 @@ async def get_id():
 
         set_point = await control.get_set_point(1)
         if set_point:
-            print("Set Point " + set_point)
+            print("Set Point " + str(set_point))
 
         fan_speed = await control.get_fan_speed(1)
         if fan_speed:
