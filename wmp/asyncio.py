@@ -6,7 +6,7 @@ from typing import Union
 from wmp.handler import parse
 
 
-class Asyncio(asyncio.Protocol):
+class Transport(asyncio.Protocol):
     def __init__(self, loop: AbstractEventLoop, callback: FunctionType = None):
         self.transport = None
         self.loop = loop

@@ -4,11 +4,11 @@ import asyncio
 from asyncio.events import AbstractEventLoop
 from typing import Union
 import wmp
-from wmp.asyncio import Asyncio
+from wmp.asyncio import Transport
 
 
 class FakeTransport():
-    def __init__(self, asyncio: Asyncio, loop: AbstractEventLoop):
+    def __init__(self, asyncio: Transport, loop: AbstractEventLoop):
         self._asyncio = asyncio
         self._loop = loop
         self._last_data: str
@@ -41,22 +41,22 @@ def loop():
 
 
 @ pytest.fixture
-def wmp_asyncio(loop: AbstractEventLoop):
-    asyncio = wmp.Asyncio(loop)
+def real_transport(loop: AbstractEventLoop):
+    asyncio = wmp.Transport(loop)
     return asyncio
 
 
 @ pytest.fixture
-def transport(wmp_asyncio: Asyncio, loop: AbstractEventLoop) -> FakeTransport:
-    t = FakeTransport(wmp_asyncio, loop)
+def transport(real_transport: Transport, loop: AbstractEventLoop) -> FakeTransport:
+    t = FakeTransport(real_transport, loop)
     asyncio.run_coroutine_threadsafe(t.wait_for_response(), loop=loop)
-    wmp_asyncio.connection_made(t)
+    real_transport.connection_made(t)
     return t
 
 
 @ pytest.fixture
-def api(wmp_asyncio):
-    return wmp.API(wmp_asyncio)
+def api(real_transport):
+    return wmp.API(real_transport)
 
 
 @ pytest.mark.asyncio

@@ -6,7 +6,7 @@ class Connector:
     def __init__(self, host, loop, callback=None):
         self._host = host
         self._loop = loop
-        self._asyncio = wmp.Asyncio(loop, callback)
+        self._asyncio = wmp.Transport(loop, callback)
         self.attempts = 0
 
     async def connect(self):

@@ -1,10 +1,10 @@
 from typing import Awaitable, List, Union
 from wmp.handler import CfgResult, CnfResult, IdResult, InfoResult, LimitsResult, PingResult
-from wmp.asyncio import Asyncio
+from wmp.asyncio import Transport
 
 
 class API:
-    def __init__(self, protocol: Asyncio):
+    def __init__(self, protocol: Transport):
         self._protocol = protocol
 
     def ping(self) -> Awaitable[PingResult]:
