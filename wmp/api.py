@@ -19,7 +19,7 @@ class API:
     def set(self, ac_num: int, function: str, value: str) -> Awaitable[bool]:
         return self._protocol.send("SET,%i:%s,%s" % (ac_num, function, value))
 
-    def get(self, ac_num: int, function: str) -> Awaitable[CnfResult]:
+    def get(self, ac_num: int, function: str) -> Awaitable[Union[CnfResult, List[CnfResult]]]:
         return self._protocol.send("GET,%i:%s" % (ac_num, function))
 
     def login(self, password: str):

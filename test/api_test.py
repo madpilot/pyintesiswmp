@@ -124,6 +124,26 @@ async def test_set(transport: FakeTransport, api: wmp.API):
 
 
 @ pytest.mark.asyncio
+async def test_get_all(transport: FakeTransport, api: wmp.API):
+    transport.set_next_response("CHN,1:ONOFF,ON\r\n" +
+                                "CHN,1:MODE,AUTO\r\n" +
+                                "CHN,1:FANSP,AUTO\r\n" +
+                                "CHN,1:VANEUD,AUTO\r\n" +
+                                "CHN,1:VANELR,AUTO\r\n" +
+                                "CHN,1:SETPTEMP,210\r\n" +
+                                "CHN,1:AMBTEMP,-32768\r\n" +
+                                "CHN,1:ERRSTATUS,OK\r\n" +
+                                "CHN,1:ERRCODE,0")
+    result = await api.get(1, "*")
+    assert len(result) == 9
+    assert result[0].__class__ == CnfResult
+    assert result[0].unit_number == 1
+    assert result[0].function == "ONOFF"
+    assert result[0].value == "ON"
+    assert transport.get_last_data() == "GET,1:*\r\n"
+
+
+@ pytest.mark.asyncio
 async def test_get(transport: FakeTransport, api: wmp.API):
     transport.set_next_response("CHN,1:MODE,AUTO")
     result = await api.get(1, "MODE")
