@@ -39,7 +39,13 @@ class PingResult:
         self.rssi = rssi
 
 
-def parse(message: str) -> Union[PingResult, IdResult, InfoResult, LimitsResult, CnfResult, bool, None]:
+class CfgResult:
+    def __init__(self, config: str, value: str):
+        self.config = config
+        self.value = value
+
+
+def parse(message: str) -> Union[PingResult, IdResult, InfoResult, LimitsResult, CnfResult, CfgResult, bool, None]:
     name = ""
     arguments = ""
     parts = message.split(":")
@@ -47,7 +53,8 @@ def parse(message: str) -> Union[PingResult, IdResult, InfoResult, LimitsResult,
     if len(parts) == 1:
         [name] = parts
     if len(parts) >= 2:
-        [name, arguments] = parts
+        name = parts.pop(0)
+        arguments = ":".join(parts)
 
     if name == "PONG":
         return PingResult(int(arguments))
@@ -68,7 +75,8 @@ def parse(message: str) -> Union[PingResult, IdResult, InfoResult, LimitsResult,
         return True
 
     if name == "CFG":
-        return True
+        [config, value] = arguments.split(",")
+        return CfgResult(config, value)
 
     results = re.match(r'LIMITS:(.+),\[(.+)\]', message)
     if results is not None:

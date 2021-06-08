@@ -34,7 +34,8 @@ class API:
         return self._protocol.send("CFG:%s" % (item))
 
     def set_limits(self, function: str, range: List[str]):
-        return self._protocol.send("LIMITS:%s,%s" % (function, ",".join(range)))
+        range_str = map(lambda s: str(s), range)
+        return self._protocol.send("LIMITS:%s,[%s]" % (function, ",".join(range_str)))
 
     def get_limits(self, function: str):
         return self._protocol.send("LIMITS:%s" % (function))
