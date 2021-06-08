@@ -1,1 +1,0 @@
-from wmp import handler
