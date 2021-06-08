@@ -140,6 +140,10 @@ async def test_get_all(transport: FakeTransport, api: wmp.API):
     assert result[0].unit_number == 1
     assert result[0].function == "ONOFF"
     assert result[0].value == "ON"
+    assert result[1].__class__ == CnfResult
+    assert result[1].unit_number == 1
+    assert result[1].function == "MODE"
+    assert result[1].value == "AUTO"
     assert transport.get_last_data() == "GET,1:*\r\n"
 
 
