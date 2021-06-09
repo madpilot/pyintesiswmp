@@ -1,4 +1,4 @@
-from test.mocls.transport import FakeTransport
+from test.mocks.transport import FakeTransport
 from wmp.handler import CfgResult, CnfResult, IdResult, InfoResult, LimitsResult, PingResult
 import pytest
 import asyncio
