@@ -1,12 +1,16 @@
 import asyncio
+from asyncio.events import AbstractEventLoop
+from asyncio.futures import Future
+from types import FunctionType
+from typing import Union
 from wmp.handler import parse
 
 
-class Asyncio(asyncio.Protocol):
-    def __init__(self, loop, callback=None):
+class Transport(asyncio.Protocol):
+    def __init__(self, loop: AbstractEventLoop, callback: FunctionType = None):
         self.transport = None
         self.loop = loop
-        self.callback = callback
+        self.callback: Union[None, FunctionType] = callback
         self.next = None
         self.disconnection_callback = None
 
@@ -37,7 +41,7 @@ class Asyncio(asyncio.Protocol):
                 for result in results:
                     self.callback(result)
 
-    def send(self, message):
+    def send(self, message: str) -> Future:
         if self.transport is not None:
             self.next = self.loop.create_future()
             self.transport.write(bytes(message + "\r\n", "UTF-8"))
