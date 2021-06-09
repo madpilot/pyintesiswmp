@@ -1,16 +1,16 @@
 from typing import Union
-from wmp import API
+from wmp.api import API
 
 
 class Control:
-    def __init__(self, connector):
-        self.api = API(connector)
+    def __init__(self, api: API):
+        self.api = api
 
     async def get_id(self):
         return await self.api.id()
 
     async def get_state(self, ac_num: int):
-        result = await self.api.get(ac_num, "*")
+        return await self.api.get(ac_num, "*")
 
     async def set_power(self, ac_num: int, state: str):
         return await self.api.set(ac_num, "ONOFF", state)
@@ -51,21 +51,3 @@ class Control:
             return result.value
         else:
             return None
-
-    async def turn_on(self, ac_num: int):
-        return await self.set_power(ac_num, "ON")
-
-    async def turn_off(self, ac_num: int):
-        return await self.set_power(ac_num, "OFF")
-
-    async def set_mode_heat(self, ac_num: int):
-        return await self.set_mode(ac_num, "heat")
-
-    async def set_mode_cool(self, ac_num: int):
-        return await self.set_mode(ac_num, "cool")
-
-    async def set_mode_fan(self, ac_num: int):
-        return await self.set_mode(ac_num, "fan")
-
-    async def set_mode_dry(self, ac_num: int):
-        return await self.set_mode(ac_num, "dry")
